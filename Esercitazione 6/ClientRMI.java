@@ -2,7 +2,6 @@
  * ClientRMI
  */
 
- 
  class ClientRMI {
     public static void main (String[] args) {
         int REGISTRYPORT = 1099;
@@ -12,7 +11,7 @@
         
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in))
         try{
-            if(args.length != 1 || args.length != 2) {
+            if(args.length != 1 &&  args.length != 2) {
                 System.out.println("Sintassi: ... NomeHost [registryport]");
                 System.exit(1);
             }
@@ -22,14 +21,14 @@
             if(args.length == 2) {
                 try{
                     temp = Integer.parseInt(args[1]);
-                    
+
+                    // check di validità della porta messa
                     if(temp < 1024 || temp > 65536) {
                     System.out.println("Il valore della porta deve essere un intero valido,
                         compreso tra 1024 e 65536")
-                        continue;
                     }
                 }catch(Exception e) {
-                    System.out.println("Errore: necessità di un intero in input")
+                    System.out.println("Errore: necessità di un intero in input");
                 }
 
                 
@@ -45,7 +44,6 @@
             System.out.print("Servizio(C = conta righe, E = elimina righe): ");
 
             String service;
-            boolean ok;
             while((service = stdIn.readLine())!=null) {
 
                 if(service.equals("C")) {
@@ -59,10 +57,10 @@
 
                     try{
                         int result = serverRMI.conta_righe(file, num);
-                        System.out.println("Conta righe effettuata sul file " + file ": righe con più di " + 
+                        System.out.println("Conta righe effettuata sul file " + file + ": righe con più di " + 
                         num + " parole = " + result);
                     }catch(RemoteException e) {
-                        System.out.println("Errore: " + e.toString())
+                        System.out.println("Errore: " + e.toString());
                     }
                     
                 }else if(service.equals("E")) {
@@ -72,7 +70,7 @@
                     
                         try{
                             int result = serverRMI.elimina_riga(file, num);
-                            System.out.println("Elimina riga effettuata sul file " + file ": numero di righe
+                            System.out.println("Elimina riga effettuata sul file + " + file ": numero di righe
                                 rimaste = " + result);
                         }catch(RemoteException e) {
                             System.out.println("Errore: " + e.toString());
