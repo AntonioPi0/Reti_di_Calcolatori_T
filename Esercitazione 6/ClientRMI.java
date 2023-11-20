@@ -48,8 +48,7 @@
 
                 if(service.equals("C")) {
 
-                    System.out.println("Inserire nome del file su cui si vuole operare
-                    e intero con seguente sintassi: FileName Num")
+                    System.out.println("Inserire nome del file su cui si vuole operare e intero con seguente sintassi: FileName Num")
 
                     String[] split = stdIn.readLIne().split(" ");
                     String file = split[0];
@@ -57,8 +56,7 @@
 
                     try{
                         int result = serverRMI.conta_righe(file, num);
-                        System.out.println("Conta righe effettuata sul file " + file + ": righe con più di " + 
-                        num + " parole = " + result);
+                        System.out.println("Conta righe effettuata sul file " + file + ": righe con più di " + num + " parole = " + result);
                     }catch(RemoteException e) {
                         System.out.println("Errore: " + e.toString());
                     }
@@ -70,20 +68,22 @@
                     
                         try{
                             int result = serverRMI.elimina_riga(file, num);
-                            System.out.println("Elimina riga effettuata sul file + " + file ": numero di righe
-                                rimaste = " + result);
+                            System.out.println("Elimina riga effettuata sul file + " + file + ": numero di righe rimaste = " + result);
                         }catch(RemoteException e) {
                             System.out.println("Errore: " + e.toString());
                         }
                     }
-                    else {System.out.println("Servizio non disponibile");}
+                    else System.out.println("Servizio non disponibile");
             }
-            System.out.println("Servizio: (C -> conta righe) (D -> elimina riga)")
+            System.out.println("Servizio: (C -> conta righe) (D -> elimina riga)");
 
         }catch (Exception e) {
-
+           System.out.println("Errore durante l'esecuzione");
         }
         
     }
  }
 
+/* Creazione del .class: javac ClientRMI.java
+   Esecuzione: java Client localhost [registry_port]
+ */
