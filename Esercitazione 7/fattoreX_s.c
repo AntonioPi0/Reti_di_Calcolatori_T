@@ -60,31 +60,57 @@ void inizializza() {
     printf("Terminata inizializzazione struttura dati!\n");
 }
 
-// algoritmo di ordinamento per i giudici
-void bubbleSort(Giudici giudici, int n) {
-    int i,j;
-
-    Giudice temp;
-    for(int i = 0; i < n-1; i++) {
-        for(j = 0; j < n-i-1; j++) {
-            if(giudici.giudice[j].punteggio> giudici.giudice[j+1].punteggio) {
-                temp = giudici.giudice[j];
-                giudici.giudice[j] = giudici.giudice[j+1];
-                giudici.giudice[j+1] = temp;
-            }
-        }
-    }
-}
-
 Giudici *classifica_giudici_1_svc(void *in, struct svc_req *rqstp) {
+
+    static Giudici res;
+    int i, k, ok, index = 0;
+    int presente;
+    Giudice temp;
 
     if(inizializzato == 0)
         inizializza();
 
-    printf("Ricevuta richiesta di giudici ordinati per punteggio");
-    bubbleSort(judge,GIUDICI);
+    // Inizializzazione res
+    for (i = 0; i < GIUDICI; i++) {
+        strcpy(res.giudice[i].nome, "Gianni");
+        res.giudice[i].punteggio = -1;
+    }
 
-    return (&judge);
+    // Inserimento giudici
+    for (i = 0; i < N; i++) {
+        presente = 0;
+
+        // Giudice presente
+        for (k = 0; k < GIUDICI; k++) {
+            if (strcmp(res.giudice[k].nome, fattoreX.fattoriX[i].giudice) == 0) {
+                res.giudice[k].punteggio += fattoreX.fattoriX[i].voto;
+                presente = 1;
+            }
+        }
+
+        // Non presente
+        if (presente == 0) {
+            strcpy(res.giudice[index].nome, fattoreX.fattoriX[i].giudice);
+            res.giudice[index].punteggio = fattoreX.fattoriX[i].voto;
+            index++;
+        }
+    }
+  
+     // Ordinamento
+    for (i = 0; i < GIUDICI - 1; i++) {
+        for (k = 0; k < GIUDICI - i - 1; k++) {
+            if (res.giudice[k].punteggio <
+                res.giudice[k + 1]
+                    .punteggio)
+            {
+                temp = res.giudice[k];
+                res.giudice[k] = res.giudice[k + 1];
+                res.giudice[k + 1] = temp;
+            }
+        }
+    }
+
+    return (&res);
 } // classifica giudici
 
 void *esprimi_giudizi_1_svc(Input *input, struct svc_req *rqstp) {
