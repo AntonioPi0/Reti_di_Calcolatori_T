@@ -1,4 +1,4 @@
-/* fattoreX_c.c
+/* sala_c.c
  *
  */
 
@@ -8,7 +8,7 @@
 
 #define N 5
 #define GIUDICI 4
-#define MAX 256
+#define MAX_L 256
 
 int main(int argc, char *argv[]) {
     char   *host;
@@ -18,9 +18,9 @@ int main(int argc, char *argv[]) {
     Giudici   *giudici;
     char    str[5];
     Input input;
-    char candidato[MAX];
-    int     i, j, fila, col;
-    char    c, ok[MAX];
+    char candidato[MAX_L];
+    int     i, j;
+    char    c, ok[MAX_L];
 
     if (argc != 2) {
         printf("usage: %s server_host\n", argv[0]);
@@ -36,6 +36,7 @@ int main(int argc, char *argv[]) {
 
     printf("Inserire:\nC) per visualizzare la classifica dei giudici\tE) per esprimere un giudizio\t^D per terminare: ");
     while (gets(ok)) {
+
         if (strcmp(ok, "E") == 0) {
             printf("Tipologia di operazione (P, M): \n");
             gets(ok);
@@ -50,15 +51,22 @@ int main(int argc, char *argv[]) {
             // Leggo il nome del candidato
             
             printf("Inserisci il nome del candidato\n");
-            while(scanf("%s", &candidato) != 1) {
-                /* Ricorda problema scanf...*/
-                printf("Candidato: %s", candidato);
-            }
+            while (scanf("%s", &candidato) != 1) {
+                    /* Ricorda problema scanf...*/
+                    do {
+                        c = getchar();
+                        printf("%c ", c);
+                    } while (c != '\n');
+                    printf("Candidato: ");
+                }
+            
+            // consumo il fine linea
+            gets(ok);
             strcpy(input.nome, candidato);
          
             // Invocazione remota
             esprimi_giudizi_1(&input, cl);
-        } // if P
+        } // if 
         else if (strcmp(ok, "C") == 0)
         {
             giudici = classifica_giudici_1(in, cl);
@@ -66,17 +74,18 @@ int main(int argc, char *argv[]) {
                 clnt_perror(cl, host);
                 exit(1);
             }
+
             printf("Classifica giudici:\n");
             for (i = 0; i < GIUDICI; i++) {
-                    printf("Giudice:%-13s\t punteggio: %-13d\n", giudici->giudice[i].nome, giudici->giudice[i].punteggio);
+                    printf("Giudice:%-10s\t punteggio: %-10d\n", giudici->giudice[i].nome, giudici->giudice[i].punteggio);
                 printf("\n");
             }
-        } // if M
+        } // if something else
         else
         {
             printf("Argomento di ingresso errato!!\n");
         }
-         printf("Inserire:\nC) per visualizzare la classifica dei giudici\tE) per esprimere un giudizio\t^D per terminare: ");
+         printf("Inserire:\nC) per visualizzare la classifica dei giudici\nE) per esprimere un giudizio\t^D per terminare: ");
     } // while
 
     // Libero le risorse, distruggendo il gestore di trasporto
